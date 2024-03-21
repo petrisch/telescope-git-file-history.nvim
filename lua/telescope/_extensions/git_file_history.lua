@@ -120,13 +120,13 @@ local function git_file_history(opts)
         .new(opts, {
             results_title = "Commits for current file",
             finder = finders.new_oneshot_job({
-                "sh",
+                "nu",
                 "-c",
                 "git log --follow --decorate --format='%H %ad%d %s' --date=format:'%Y-%m-%d' --name-only "
                     .. vim.fn.expand("%")
                     .. " | awk '{if (!NF) next; if (line) {print line \""
                     .. SEPARATOR
-                    .. '" $0; line=""} else {line=$0}}\'',
+                    .. "\" $0; line=\"\"} else {line=$0}}\'",
             }, opts),
             sorter = conf.file_sorter(opts),
             attach_mappings = function(prompt_bufnr, map)
@@ -172,7 +172,7 @@ local function git_file_history(opts)
                         return
                     end
                     local cmd = {
-                        "sh",
+                        "nu",
                         "-c",
                         "GIT_PAGER=cat git show " .. entry.value .. ":" .. entry.path,
                     }
