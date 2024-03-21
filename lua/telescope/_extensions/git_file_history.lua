@@ -104,7 +104,7 @@ local function make_commit_entry(opts)
 end
 
 local function is_git_directory()
-    local result = vim.fn.system("git rev-parse --is-inside-work-tree")
+    local result = vim.fn.system({"git rev-parse --is-inside-work-tree"})
     return result == "true\n"
 end
 
