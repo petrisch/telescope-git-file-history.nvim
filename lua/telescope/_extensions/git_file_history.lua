@@ -105,7 +105,7 @@ end
 
 local function is_git_directory()
     local result = vim.fn.system("git rev-parse --is-inside-work-tree")
-    return result == "true"
+    return result == "true\n"
 end
 
 local function git_file_history(opts)
