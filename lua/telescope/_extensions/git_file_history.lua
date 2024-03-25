@@ -120,7 +120,7 @@ local function git_file_history(opts)
         .new(opts, {
             results_title = "Commits for current file",
             finder = finders.new_oneshot_job({
-                "sh",
+                "nu",
                 "-c",
                 "git log --follow --decorate --format='%H %ad%d %s' --date=format:'%Y-%m-%d' --name-only "
                     .. vim.fn.expand("%")
@@ -172,7 +172,7 @@ local function git_file_history(opts)
                         return
                     end
                     local cmd = {
-                        "sh",
+                        "nu",
                         "-c",
                         "GIT_PAGER=cat git show " .. entry.value .. ":" .. entry.path,
                     }
