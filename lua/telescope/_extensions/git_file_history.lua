@@ -126,7 +126,7 @@ local function git_file_history(opts)
                     .. vim.fn.expand("%")
                     .. " | awk '{if (!NF) next; if (line) {print line \""
                     .. SEPARATOR
-                    .. '" $0; line=""} else {line=$0}}\'',
+                    .. "\" $0; line=\"\"} else {line=$0}}\'",
             }, opts),
             sorter = conf.file_sorter(opts),
             attach_mappings = function(prompt_bufnr, map)
