@@ -116,12 +116,25 @@ local function git_file_history(opts)
         error(vim.fn.getcwd() .. " is not a git directory")
     end
 
+    if vim.o.shell == "cmd.exe" then
+      Shell = "cmd.exe" -- Below git command doesn't really work with windows
+      Shell_arg = "/c"
+    else
+      Shell = "sh"
+      Shell_arg = "-c"
+    end
+
+    Shell = vim.F.if_nil(opts.shell, Shell)
+    -- Shell = gfh_config.values.shell
+    Shell_arg = vim.F.if_nil(opts.shell_arg, Shell_arg)
+    -- Shell_arg = gfh_config.values.shell_arg
+
     pickers
         .new(opts, {
-            results_title = "Commits for current file",
             finder = finders.new_oneshot_job({
-                "nu",
-                "-c",
+            results_title = "Commits for current file",
+                Shell,
+                Shell_arg,
                 "git log --follow --decorate --format='%H %ad%d %s' --date=format:'%Y-%m-%d' --name-only "
                     .. vim.fn.expand("%")
                     .. " | awk '{if (!NF) next; if (line) {print line \""
@@ -172,8 +185,8 @@ local function git_file_history(opts)
                         return
                     end
                     local cmd = {
-                        "nu",
-                        "-c",
+                        Shell,
+                        Shell_arg,
                         "GIT_PAGER=cat git show " .. entry.value .. ":" .. entry.path,
                     }
                     local ft = pfiletype.detect(entry.path)
@@ -193,6 +206,9 @@ local function git_file_history(opts)
         })
         :find()
 end
+
+print(vim.inspect(Shell))
+-- print(vim.inspect(gfh_config))
 
 return telescope.register_extension({
     setup = gfh_config.setup,
